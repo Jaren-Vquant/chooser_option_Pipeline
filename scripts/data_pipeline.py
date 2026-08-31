@@ -7,7 +7,7 @@
 原始数据获取模块(起始日是2018-01-01，结束日是最新日期，定期执行获取数据)
 获取：JPM股价，VIX指数，国债利率
 """
-def fetch_raw_data(FRED_API_KEY：str = "add45cfc6b591adda898f43319ed4619"):
+def fetch_raw_data(FRED_API_KEY: str = "add45cfc6b591adda898f43319ed4619"):
     import yfinance as yf
     import pandas as pd
     from datetime import datetime
