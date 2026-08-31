@@ -1,0 +1,32 @@
+name: 每日数据管道
+
+on:
+  schedule:
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: 安装依赖
+        run: |
+          pip install pandas numpy yfinance fredapi
+      - name: 运行数据管道
+        run: |
+          cd scripts
+          python data_pipeline.py
+      - name: 提交更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add scripts/raw_data/ scripts/new_data/
+          git diff --staged --quiet || git commit -m "🤖 Auto-update: 数据管道执行完成 [skip ci]"
+          git push
